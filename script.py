@@ -1,5 +1,7 @@
 import sys
 
+from setup import setup
+
 
 def show_help():
     print("Commands:")
@@ -12,15 +14,12 @@ def fetch():
     print("fetching...")
 
 
-def setup():
-    print("setting up...")
-
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         show_help()
     else:
-        command = sys.argv[2].lower()
+        command = sys.argv[1].lower()
         if command == "fetch":
             fetch()
         elif command == "setup":

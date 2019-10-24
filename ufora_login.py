@@ -26,6 +26,3 @@ def get_cookies(username, password):
         "SAMLResponse": saml_response
     })
     return brightspace_response.cookies
-
-
-print(get_cookies("abc", "def"))

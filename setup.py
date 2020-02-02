@@ -1,10 +1,7 @@
 import argparse
-import getopt
 import json
-import string
-import sys
 
-from ufora_login import get_cookies
+from ufora_login import get_session
 
 
 def setup():
@@ -19,8 +16,8 @@ def setup():
         username = input("Ufora username: ")
     if not password:
         password = input("Ufora password: ")
-    cookies = get_cookies(username, password)
-    if cookies is None:
+    session = get_session(username, password)
+    if session is None:
         print("Invalid login credentials")
         return
     with open("credentials.json", "w+") as f:

@@ -5,7 +5,7 @@ login_url = "https://ufora.ugent.be/d2l/lp/auth/saml/login"
 d2l_auth_url = "https://ufora.ugent.be/d2l/lp/auth/login/samlLogin.d2l"
 
 
-def get_cookies(username, password):
+def get_session(username, password):
     login_response = requests.get(login_url)
     login_html = BeautifulSoup(login_response.text, "html.parser")
     auth_state = login_html.find("input", {"name": "AuthState"})["value"]
@@ -22,7 +22,7 @@ def get_cookies(username, password):
         return None
     saml_response = saml_response_element["value"]
     session = requests.session()
-    brightspace_response = session.post(d2l_auth_url, allow_redirects=False, data={
+    session.post(d2l_auth_url, allow_redirects=False, data={
         "SAMLResponse": saml_response
     })
-    return brightspace_response.cookies
+    return session

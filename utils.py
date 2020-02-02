@@ -3,12 +3,11 @@ import re
 import string
 from os import path
 
-import requests
 from tqdm import tqdm
 
 from brightspace import BrightspaceAPI
 
-filename_whitelist = " +:_ë-." + string.ascii_letters + string.digits
+filename_whitelist = " +:_ë-.'" + string.ascii_letters + string.digits
 brightspace_api = BrightspaceAPI()
 
 
@@ -35,14 +34,13 @@ def create_filename(item):
 
 def download_from_url(url, filepath):
     if not path.exists(filepath):
-        # Only create metadata if it doesn't exist
+        # Only download file if it doesn't exist
         os.makedirs("/".join(filepath.split("/")[:-1]), exist_ok=True)
         file_size = int(brightspace_api.session.head(url).headers["Content-Length"])
-        header = {"Range": "bytes=%s-%s" % (0, file_size)}
         pbar = tqdm(
             total=file_size, initial=0,
             unit="B", unit_scale=True, desc="Downloading " + url.split("/")[-1])
-        req = brightspace_api.session.get(url, headers=header, stream=True)
+        req = brightspace_api.session.get(url, stream=True)
         with(open(filepath, "ab")) as f:
             for chunk in req.iter_content(chunk_size=1024):
                 if chunk:

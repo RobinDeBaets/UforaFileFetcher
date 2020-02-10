@@ -1,5 +1,3 @@
-import json
-
 from ufora_login import get_session
 
 ufora = "https://ufora.ugent.be"
@@ -17,13 +15,15 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-def get_credentials():
-    with open("credentials.json", "r") as f:
-        return json.loads(f.read())
-
-
 class BrightspaceAPI(metaclass=Singleton):
 
     def __init__(self):
-        credentials = get_credentials()
-        self.session = get_session(credentials["username"], credentials["password"])
+        self._session = None
+
+    def get_session(self):
+        if not self._session:
+            # Lazy load the session
+            import utils
+            credentials = utils.get_credentials()
+            self._session = get_session(credentials["username"], credentials["password"])
+        return self._session

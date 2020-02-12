@@ -1,5 +1,6 @@
 import argparse
 import json
+import getpass 
 
 from ufora_login import get_session
 
@@ -15,7 +16,7 @@ def setup():
     if not username:
         username = input("Ufora username: ")
     if not password:
-        password = input("Ufora password: ")
+        password = getpass.getpass(prompt='Ufora password: ', stream=None) 
     session = get_session(username, password)
     if session is None:
         print("Invalid login credentials")

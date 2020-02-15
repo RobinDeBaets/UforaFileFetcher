@@ -11,16 +11,27 @@ def get_course(course_id):
     except JSONDecodeError:
         print(f"Course {course_id} does not exist")
 
+
 def get_courses():
     def is_valid_course(course):
         course_info = course["OrgUnit"]
         return course_info["Type"]["Id"] == 3 and "Sandbox" not in course_info["Name"]
 
     courses = list(
-        filter(is_valid_course, brightspace_api.get_session().get(f"{lp_root}/enrollments/myenrollments/").json()["Items"]))
+        filter(is_valid_course,
+               brightspace_api.get_session().get(f"{lp_root}/enrollments/myenrollments/").json()["Items"]))
     # First show pinned courses, then real courses
     courses.sort(key=lambda course: (bool(course["PinDate"]), " - " in course["OrgUnit"]["Name"]), reverse=True)
     return courses
+
+
+def get_courses_list():
+    courses = get_courses()
+    courselist = dict()
+    for course in courses:
+        course_info = course["OrgUnit"]
+        courselist[course_info["Name"]] = course_info["Id"]
+    return courselist
 
 
 def print_courses():

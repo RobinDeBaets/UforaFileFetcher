@@ -1,3 +1,4 @@
+from whaaaaat import prompt, print_json
 import argparse
 import getpass
 import json
@@ -13,10 +14,24 @@ def setup():
     args = parser.parse_args()
     username = args.username
     password = args.password
+    questions = []
     if not username:
-        username = input("Ufora username: ")
+        questions.append({
+            "type": "input",
+            "message": "Enter your Ufora username",
+            "name": "username"
+        })
     if not password:
-        password = getpass.getpass(prompt="Ufora password: ")
+        questions.append({
+            "type": "password",
+            "message": "Enter your Ufora password",
+            "name": "password"
+        })
+
+        answers = prompt(questions)
+
+        username = answers["username"]
+        password = answers["password"]
     session = get_session(username, password)
     if session is None:
         print("Invalid login credentials")

@@ -91,3 +91,22 @@ def get_config():
     except JSONDecodeError:
         print("File config.json is not a valid json file")
     exit()
+
+
+def write_to_config(key, value):
+    try:
+        with open(f"{dir_path}/config.json", "r+") as jsonFile:
+            data = json.load(jsonFile)
+
+            tmp = data[key]
+            data[key] = value
+
+            jsonFile.seek(0)  # rewind
+            json.dump(data, jsonFile)
+            jsonFile.truncate()
+
+    except FileNotFoundError:
+        print("File config.json does not exist")
+    except JSONDecodeError:
+        print("File config.json is not a valid json file")
+    exit()

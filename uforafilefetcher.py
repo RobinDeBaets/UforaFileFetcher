@@ -64,8 +64,11 @@ def run():
                 })]
 
                 directory_answer = prompt(directory_question)
+                output_directory = directory_answer["directory"]
+                if output_directory == "":
+                    output_directory = "~/UforaFileFetcher"
 
-                write_to_config("output_directory", directory_answer["directory"])
+                write_to_config("output_directory", output_directory)
 
             if answer == "Selected courses" or answer == "Both":
                 course_ids = get_course_choices("Select courses to add to config")

@@ -1,6 +1,6 @@
 # UforaFileFetcher
 
-A simple tool to download files from Ufora (Brightspace) automatically using the BrightSpace API.
+A simple tool to download files from [Ufora](https://ufora.ugent.be/) (Brightspace) automatically using the BrightSpace API.
 The tool can download files and create PDF summaries of metadata of files and modules.
 
 For fun purposes **ONLY**.

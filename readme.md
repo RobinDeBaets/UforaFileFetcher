@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 ### Credentials
 
-This tool will need your credentials. These can be configured once and will be saved to `credentials.json` in plaintext, due to a lack of a better alternative.
+This tool will need your credentials. These can be configured once using this command and will be saved to `credentials.json` in plaintext, due to a lack of a better alternative.
 
 ```
 ./uforafilefetcher setup
@@ -89,7 +89,7 @@ Logisch Programmeren
 
 ### Sync
 
-Configure `config.json` to contain the courses that you want to sync
+Configure `config.json` to contain the courses that you want to sync.
 ```
 > nano config.json
 {

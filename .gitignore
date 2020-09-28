@@ -2,4 +2,9 @@ venv
 .idea
 __pycache__
 credentials.json
+config.json
 *pyc
+build
+dist
+UforaFileFetcher.egg-info
+output

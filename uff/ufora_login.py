@@ -2,17 +2,20 @@ import requests
 from bs4 import BeautifulSoup
 
 login_url = "https://ufora.ugent.be/d2l/lp/auth/saml/login"
+login_root = "https://login.ugent.be"
 d2l_auth_url = "https://ufora.ugent.be/d2l/lp/auth/login/samlLogin.d2l"
 
 
 def get_session(username, password):
-    login_response = requests.get(login_url)
+    session = requests.Session()
+    login_response = session.get(login_url)
     login_html = BeautifulSoup(login_response.text, "html.parser")
-    auth_state = login_html.find("input", {"name": "AuthState"})["value"]
-    auth_response = requests.post(login_response.url, data={
+    csrf_token = login_html.find("input", {"name": "csrfToken"})["value"]
+    action_url = login_html.find("form", {"id": "fm1"})["action"]
+    auth_response = session.post(f"{login_root}{action_url}", data={
         "username": username,
         "password": password,
-        "AuthState": auth_state,
+        "csrfToken": csrf_token,
         "NEGOTIATE_AUTOLOGIN_ENABLE": "True",
         "wp-submit": "Log+in"
     })
@@ -21,7 +24,6 @@ def get_session(username, password):
     if saml_response_element is None:
         return None
     saml_response = saml_response_element["value"]
-    session = requests.session()
     session.post(d2l_auth_url, allow_redirects=False, data={
         "SAMLResponse": saml_response
     })

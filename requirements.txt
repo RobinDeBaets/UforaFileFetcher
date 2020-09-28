@@ -1,9 +1,0 @@
-beautifulsoup4==4.8.1
-certifi==2019.9.11
-chardet==3.0.4
-idna==2.8
-pdfkit==0.6.1
-requests==2.22.0
-soupsieve==1.9.4
-tqdm==4.42.0
-urllib3==1.25.6

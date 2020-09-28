@@ -7,11 +7,7 @@ from os import path
 
 from tqdm import tqdm
 
-from brightspace import BrightspaceAPI
-
 filename_whitelist = " +:_ë-.'" + string.ascii_letters + string.digits
-brightspace_api = BrightspaceAPI()
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def clean_filename(name):
@@ -39,7 +35,7 @@ def create_filename_without_extension(item):
     return clean_filename(item["Title"])
 
 
-def download_from_url(url, filepath):
+def download_from_url(brightspace_api, url, filepath):
     if not path.exists(filepath):
         # Only download file if it doesn't exist
         os.makedirs("/".join(filepath.split("/")[:-1]), exist_ok=True)
@@ -53,41 +49,17 @@ def download_from_url(url, filepath):
                 if chunk:
                     f.write(chunk)
                     pbar.update(1024)
+        pbar.update(file_size)
         pbar.close()
 
 
-def get_credentials():
+def get_config(config_file):
     try:
-        with open(f"{dir_path}/credentials.json", "r") as f:
-            credentials = json.loads(f.read())
-            for key in ["username", "password"]:
-                if key not in credentials:
-                    print(f"{key} missing from credentials")
-                    exit()
-            return credentials
+        with open(config_file, "r") as f:
+            return json.loads(f.read())
     except FileNotFoundError:
-        print("File credentials.json does not exist")
+        print(f"File {config_file} does not exist")
     except JSONDecodeError:
-        print("File credentials.json is not a valid json file")
+        print(f"File {config_file} is not a valid json file")
     exit()
 
-
-def get_config():
-    try:
-        with open(f"{dir_path}/config.json", "r") as f:
-            config = json.loads(f.read())
-            for key in ["output_directory", "courses"]:
-                if key not in config:
-                    print(f"{key} missing from config")
-                    exit()
-            try:
-                config["courses"] = list(map(int, config["courses"]))
-            except ValueError:
-                print("File config.json contains invalid course id")
-                exit()
-            return config
-    except FileNotFoundError:
-        print("File config.json does not exist")
-    except JSONDecodeError:
-        print("File config.json is not a valid json file")
-    exit()

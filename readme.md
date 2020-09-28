@@ -56,7 +56,7 @@ Will download a specific course to the specified output directory. Use the previ
 courses.
 
 ```
-uforafilefetcher download <course_id> <config> <output_dir>
+uforafilefetcher download <course_id> <config> [output_dir]
 ```
 
 ### Show help

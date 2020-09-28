@@ -20,7 +20,7 @@ def setup():
     output_directory = inquirer.shortcuts.path(message="Specify output directory", path_type=Path.DIRECTORY)
     brightspace_api = BrightspaceAPI(username, password)
     courses = get_courses_list(brightspace_api)
-    selected_courses = inquirer.checkbox(message="Select courses to sync",
+    selected_courses = inquirer.checkbox(message="Select courses to sync (press enter when ready)",
                                          choices=courses
                                          )
     course_ids = [courses[course] for course in selected_courses]

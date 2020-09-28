@@ -16,18 +16,20 @@ def show_help(commands):
 
 
 def check_command_valid(args, commands):
-    if len(sys.argv) <= 1:
+    if len(args) <= 1:
         print("A command should be given")
         show_help(commands)
         exit(1)
-    command = sys.argv[1].lower()
+    command = args[1].lower()
+    required_args_count = len([arg for arg in commands[command] if arg.startswith("<")])
     if command not in commands:
         print("Command unknown")
         show_help(commands)
         exit(1)
-    elif len(args) != len(commands[command]):
-        print(f"The command {command} needs {len(commands[command])} arguments: {', '.join(commands[command])}")
-        print(1)
+    elif (len(args) - 2) < required_args_count:
+        # Ignore first two arguments, which are the executable and the command
+        print(f"The command {command} needs at least {required_args_count} arguments: {', '.join(commands[command])}")
+        exit(1)
 
 
 def run():
@@ -35,13 +37,14 @@ def run():
         "help": [],
         "setup": [],
         "courses": ["<config>"],
-        "download": ["<course_id>", "<config>", "<output_dir>"],
+        "download": ["<course_id>", "<config>", "[output_dir]"],
         "sync": ["<config>"]
     }
-    check_command_valid(sys.argv, commands)
-    command = sys.argv[1].lower()
+    args = sys.argv
+    check_command_valid(args, commands)
+    command = args[1].lower()
     if command == "courses":
-        config = get_config(sys.argv[2])
+        config = get_config(args[2])
         brightspace_api = BrightspaceAPI.from_config(config)
         print_courses(brightspace_api)
     elif command == "setup":
@@ -49,19 +52,19 @@ def run():
     elif command == "download":
         course_id = None
         try:
-            course_id = int(sys.argv[2])
+            course_id = int(args[2])
         except ValueError:
             print("Invalid course id")
             exit()
-        config = get_config(sys.argv[3])
+        config = get_config(args[3])
         brightspace_api = BrightspaceAPI.from_config(config)
-        if 5 <= len(sys.argv):
-            output_dir = os.path.expanduser(sys.argv[4])
+        if 5 <= len(args):
+            output_dir = os.path.expanduser(args[4])
         else:
             output_dir = os.getcwd()
         download_files(brightspace_api, course_id, output_dir)
     elif command == "sync":
-        config = get_config(sys.argv[2])
+        config = get_config(args[2])
         sync(config)
     else:
         show_help(commands)

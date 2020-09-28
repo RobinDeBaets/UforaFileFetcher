@@ -58,3 +58,9 @@ courses.
 ```
 uforafilefetcher download <course_id> <config> <output_dir>
 ```
+
+### Show help
+
+```
+uforafilefetcher help
+```

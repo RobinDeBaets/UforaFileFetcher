@@ -89,4 +89,3 @@ def traverse_element(brightspace_api, item, course_id, path, course, output_dir)
             thread = threading.Thread(target=traverse_element,
                                       args=(brightspace_api, sub_element, course_id, path[:], course, output_dir))
             thread.start()
-        path.pop()

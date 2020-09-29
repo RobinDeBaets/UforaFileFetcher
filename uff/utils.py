@@ -4,15 +4,9 @@ import re
 import string
 from json import JSONDecodeError
 from os import path
+from pathvalidate import sanitize_filename
 
 from tqdm import tqdm
-
-filename_whitelist = " +:_ë-.'" + string.ascii_letters + string.digits
-
-
-def clean_filename(name):
-    return "".join([c for c in name if c in filename_whitelist])
-
 
 # Some courses have an annoying prefix, we'll ignore it
 course_prefix = re.compile("^[^-]+ - ")
@@ -22,17 +16,17 @@ def create_filepath(course, path):
     course_name = course["OrgUnit"]["Name"]
     course_name = course_prefix.sub("", course_name)
     return "/".join(
-        [clean_filename(course_name)] + [clean_filename(module["Title"]) for module in path])
+        [sanitize_filename(course_name)] + [sanitize_filename(module["Title"]) for module in path])
 
 
 def create_filename(item):
     extension = item["Url"].split(".")[-1]
     extension = extension.split("?")[0]
-    return clean_filename(item["Title"]) + "." + extension
+    return sanitize_filename(item["Title"]) + "." + extension
 
 
 def create_filename_without_extension(item):
-    return clean_filename(item["Title"])
+    return sanitize_filename(item["Title"])
 
 
 def download_from_url(brightspace_api, url, filepath):

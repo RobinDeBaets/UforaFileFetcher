@@ -26,7 +26,7 @@ uforafilefetcher setup
 ```
 python3 -m venv venv
 source venv/bin/activate
-pip install -e . 
+sudo pip install -e . 
 ```
 
 

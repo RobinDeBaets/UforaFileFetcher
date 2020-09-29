@@ -10,6 +10,7 @@ setup(
         "requests",
         "beautifulsoup4",
         "tqdm",
-        "inquirer"
+        "inquirer",
+        "pathvalidate"
     ]
 )

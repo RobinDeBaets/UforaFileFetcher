@@ -1,6 +1,6 @@
 from json import JSONDecodeError
 
-from uff.brightspace import lp_root
+from uff.brightspace import lp_root, APIError
 
 
 def get_course(brightspace_api, course_id):
@@ -8,6 +8,8 @@ def get_course(brightspace_api, course_id):
         return brightspace_api.get_session().get(f"{lp_root}/enrollments/myenrollments/{course_id}").json()
     except JSONDecodeError:
         print(f"Course {course_id} does not exist")
+    except APIError as e:
+        print(e)
 
 
 def get_courses(brightspace_api):

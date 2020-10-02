@@ -1,7 +1,7 @@
 import os
 import sys
 
-from uff.brightspace import BrightspaceAPI
+from uff.brightspace import BrightspaceAPI, APIError
 from uff.courses import print_courses
 from uff.files import download_files
 from uff.setup_config import setup
@@ -71,4 +71,8 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    try:
+        run()
+    except APIError as e:
+        print(e)
+        exit(1)

@@ -8,7 +8,7 @@ from uff.courses import get_course
 from uff.utils import create_filename, create_filepath, download_from_url, create_filename_without_extension
 
 def get_module(brightspace_api, module_id, course_id):
-    return brightspace_api.get_session().get(f"{le_root}/{course_id}/content/modules/{module_id}/structure/").json()
+    return brightspace_api.session.get(f"{le_root}/{course_id}/content/modules/{module_id}/structure/").json()
 
 
 def download_files(brightspace_api, course_id, output_dir):
@@ -16,7 +16,7 @@ def download_files(brightspace_api, course_id, output_dir):
     if course is None:
         print(f"Could not find course {course_id}")
         exit()
-    modules = brightspace_api.get_session().get(f"{le_root}/{course_id}/content/root/").json()
+    modules = brightspace_api.session.get(f"{le_root}/{course_id}/content/root/").json()
     for module in modules:
         thread = threading.Thread(target=traverse_element,
                                   args=(brightspace_api, module, course_id, [], course, output_dir))

@@ -5,7 +5,7 @@ from uff.brightspace import lp_root, APIError
 
 def get_course(brightspace_api, course_id):
     try:
-        return brightspace_api.get_session().get(f"{lp_root}/enrollments/myenrollments/{course_id}").json()
+        return brightspace_api.session.get(f"{lp_root}/enrollments/myenrollments/{course_id}").json()
     except JSONDecodeError:
         print(f"Course {course_id} does not exist")
     except APIError as e:
@@ -19,7 +19,7 @@ def get_courses(brightspace_api):
 
     courses = list(
         filter(is_valid_course,
-               brightspace_api.get_session().get(f"{lp_root}/enrollments/myenrollments/").json()["Items"]))
+               brightspace_api.session.get(f"{lp_root}/enrollments/myenrollments/").json()["Items"]))
     # First show pinned courses, then real courses
     courses.sort(key=lambda course: (bool(course["PinDate"]), " - " in course["OrgUnit"]["Name"]), reverse=True)
     return courses

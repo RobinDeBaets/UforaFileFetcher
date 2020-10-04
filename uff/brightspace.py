@@ -16,14 +16,9 @@ class BrightspaceAPI:
         self._session = None
         self.username = username
         self.password = password
-        self.get_session()
-
-    def get_session(self):
-        if not self._session:
-            self._session = get_session(self.username, self.password)
-        if self._session is None:
+        self.session = get_session(self.username, self.password)
+        if self.session is None:
             raise APIError("No session could be created. Please make sure your credentials are correct")
-        return self._session
 
     @staticmethod
     def from_config(config):

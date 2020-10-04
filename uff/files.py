@@ -3,10 +3,9 @@ import threading
 from os import path
 
 from uff import pdf_wrapper
-from uff.brightspace import le_root, ufora
+from uff.brightspace import le_root, ufora, APIError
 from uff.courses import get_course
 from uff.utils import create_filename, create_filepath, download_from_url, create_filename_without_extension
-
 
 def get_module(brightspace_api, module_id, course_id):
     return brightspace_api.get_session().get(f"{le_root}/{course_id}/content/modules/{module_id}/structure/").json()

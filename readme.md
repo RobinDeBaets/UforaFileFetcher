@@ -11,7 +11,7 @@ The tool can download files and create PDF summaries of metadata of files and mo
 sudo apt install wkhtmltopdf
 git clone https://github.com/RobinDeBaets/UforaFileFetcher
 cd UforaFileFetcher
-sudo python3 setup.py install
+python3 setup.py install --user
 ```
 
 You can now run the setup.

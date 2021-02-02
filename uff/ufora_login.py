@@ -23,16 +23,21 @@ def get_session(username, password):
     saml_html = BeautifulSoup(auth_response.text, "html.parser")
     saml_response_element = saml_html.find("input", {"name": "SAMLResponse"})
     if saml_response_element is None:
-        # 90 days to change password (?)
-        password_element = saml_html.find("a", {"href": password_url})
-        if password_element is None:
-            return None
-        password_elements = saml_html.find_all("a")
-        print(
-            f"Warning: please consider updating your password, it will be automatically expire in less than 60 days. Visit {password_elements[1]['href']} to change your password.")
-        auth_response = session.get(password_elements[2]["href"])
-        saml_html = BeautifulSoup(auth_response.text, "html.parser")
-        saml_response_element = saml_html.find("input", {"name": "SAMLResponse"})
+        if "Incorrect username or password" in auth_response.text:
+            print("Incorrect username or password")
+            return
+        else:
+            # 90 days to change password (?)
+            password_element = saml_html.find("a", {"href": password_url})
+            if password_element is None:
+                return None
+            password_elements = saml_html.find_all("a")
+            print(
+                f"Warning: please consider updating your password, it will be automatically expire in less than 60 days. "
+                f"Visit {password_elements[1]['href']} to change your password.")
+            auth_response = session.get(password_elements[2]["href"])
+            saml_html = BeautifulSoup(auth_response.text, "html.parser")
+            saml_response_element = saml_html.find("input", {"name": "SAMLResponse"})
     saml_response = saml_response_element["value"]
     session.post(d2l_auth_url, allow_redirects=False, data={
         "SAMLResponse": saml_response

@@ -1,14 +1,18 @@
 # UforaFileFetcher
 
 A multithreaded Python tool to download files from [Ufora](https://ufora.ugent.be) (Brightspace) automatically using the BrightSpace API.
-The tool can download files and create PDF summaries of metadata of files and modules.
+
+Extra features:
+- Create PDFs of file and module metadata (requires `wkhtmltopdf`)
+- Automatically convert .ppt and .pptx files to .pdf (requires `unoconv`)
 
 **LICENSE**: [WTFPL](https://en.wikipedia.org/wiki/WTFPL)
 
 ## Setup
  
 ```
-sudo apt install wkhtmltopdf
+sudo apt install wkhtmltopdf # Optional
+sudo apt install unoconv # Optional
 git clone https://github.com/RobinDeBaets/UforaFileFetcher
 cd UforaFileFetcher
 python3 setup.py install --user

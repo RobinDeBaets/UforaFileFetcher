@@ -34,18 +34,18 @@ def download_from_url(brightspace_api, url, filepath):
         # Only download file if it doesn't exist
         os.makedirs("/".join(filepath.split("/")[:-1]), exist_ok=True)
         file_size = int(brightspace_api.session.head(url).headers["Content-Length"])
-        pbar = tqdm(
-            total=file_size, initial=0,
-            unit="B", unit_scale=True, desc="Downloading " + url.split("/")[-1])
-        req = brightspace_api.session.get(url, stream=True)
-        with(open(filepath, "ab")) as f:
-            for chunk in req.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-                    pbar.update(1024)
-        pbar.update(file_size)
-        pbar.close()
-
+        with tqdm(
+                total=file_size, initial=0,
+                unit="B", unit_scale=True, desc="Downloading " + url.split("/")[-1]) as pbar:
+            req = brightspace_api.session.get(url, stream=True)
+            with(open(filepath, "ab")) as f:
+                for chunk in req.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+                        pbar.update(1024)
+            pbar.update(file_size)
+        return True
+    return False
 
 def get_config(config_file):
     try:
@@ -56,4 +56,3 @@ def get_config(config_file):
     except JSONDecodeError:
         print(f"File {config_file} is not a valid json file")
     exit()
-

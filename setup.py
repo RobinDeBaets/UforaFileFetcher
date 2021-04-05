@@ -11,6 +11,8 @@ setup(
         "beautifulsoup4",
         "tqdm",
         "inquirer",
-        "pathvalidate"
+        "selenium",
+        "webdriver-manager",
+        "pathvalidate",
     ]
 )

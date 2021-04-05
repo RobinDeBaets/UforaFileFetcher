@@ -1,45 +1,38 @@
-import requests
-from bs4 import BeautifulSoup
+import logging
+import os
 
-login_url = "https://ufora.ugent.be/d2l/lp/auth/saml/login"
-login_root = "https://login.ugent.be"
-d2l_auth_url = "https://ufora.ugent.be/d2l/lp/auth/login/samlLogin.d2l"
-password_url = "https://wachtwoord.ugent.be/"
+import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+
+LOGIN_URL = "https://elosp.ugent.be/welcome"
 
 
 def get_session(username, password):
+    print("Launching headless browser to login")
+    os.environ["WDM_LOG_LEVEL"] = "0"
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    driver.get(LOGIN_URL)
+    driver.find_element_by_id("ugent-login-button").click()
+    driver.find_element_by_id("username").send_keys(username)
+    driver.find_element_by_id("wp-submit").click()
+    driver.find_element_by_xpath("//a[contains(@title,'Sign In')]").click()
+    WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@name='passwd']"))
+    )
+    driver.find_element_by_xpath("//input[@name='passwd']").send_keys(password)
+    driver.find_element_by_xpath("//input[@type='submit']").click()
+    driver.find_element_by_xpath("//input[@type='submit']").click()
+    cookies = driver.get_cookies()
     session = requests.Session()
-    login_response = session.get(login_url)
-    login_html = BeautifulSoup(login_response.text, "html.parser")
-    csrf_token = login_html.find("input", {"name": "csrfToken"})["value"]
-    action_url = login_html.find("form", {"id": "fm1"})["action"]
-    auth_response = session.post(f"{login_root}{action_url}", data={
-        "username": username,
-        "password": password,
-        "csrfToken": csrf_token,
-        "NEGOTIATE_AUTOLOGIN_ENABLE": "True",
-        "wp-submit": "Log+in"
-    })
-    saml_html = BeautifulSoup(auth_response.text, "html.parser")
-    saml_response_element = saml_html.find("input", {"name": "SAMLResponse"})
-    if saml_response_element is None:
-        if "Incorrect username or password" in auth_response.text:
-            print("Incorrect username or password")
-            return
-        else:
-            # 90 days to change password (?)
-            password_element = saml_html.find("a", {"href": password_url})
-            if password_element is None:
-                return None
-            password_elements = saml_html.find_all("a")
-            print(
-                f"Warning: please consider updating your password, it will be automatically expire in less than 60 days. "
-                f"Visit {password_elements[1]['href']} to change your password.")
-            auth_response = session.get(password_elements[2]["href"])
-            saml_html = BeautifulSoup(auth_response.text, "html.parser")
-            saml_response_element = saml_html.find("input", {"name": "SAMLResponse"})
-    saml_response = saml_response_element["value"]
-    session.post(d2l_auth_url, allow_redirects=False, data={
-        "SAMLResponse": saml_response
-    })
+    for cookie in cookies:
+        session.cookies.set(cookie["name"], cookie["value"])
     return session

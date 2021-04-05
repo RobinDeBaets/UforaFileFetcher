@@ -15,7 +15,7 @@ sudo apt install wkhtmltopdf # Optional
 sudo apt install unoconv # Optional
 git clone https://github.com/RobinDeBaets/UforaFileFetcher
 cd UforaFileFetcher
-python3 setup.py install --user
+pip3 install .
 ```
 
 You can now run the setup.
@@ -30,7 +30,7 @@ uforafilefetcher setup
 ```
 python3 -m venv venv
 source venv/bin/activate
-sudo pip install -e . 
+pip install -e . 
 ```
 
 

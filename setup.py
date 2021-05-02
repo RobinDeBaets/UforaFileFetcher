@@ -7,12 +7,12 @@ setup(
     entry_points={
         "console_scripts": ['uforafilefetcher=uff.uforafilefetcher:run'],
     }, install_requires=[
-        "requests",
-        "beautifulsoup4",
-        "tqdm",
-        "inquirer",
-        "selenium",
-        "webdriver-manager",
-        "pathvalidate",
+        "requests==2.25.1",
+        "beautifulsoup4==4.9.3",
+        "tqdm==4.60.0",
+        "inquirer==2.7.0",
+        "selenium==3.141.0",
+        "webdriver-manager==3.4.1",
+        "pathvalidate==2.4.1",
     ]
 )

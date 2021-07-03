@@ -1,6 +1,7 @@
 # UforaFileFetcher
 
 A multithreaded Python tool to download files from [Ufora](https://ufora.ugent.be) (Brightspace) automatically using the BrightSpace API.
+Supports 2FA .
 
 Extra features:
 - Create PDFs of file and module metadata (requires `wkhtmltopdf`)

@@ -30,7 +30,8 @@ def setup():
             "courses": course_ids,
             "credentials": {
                 "username": username,
-                "password": password
+                "password": password,
+                "otc_secret": otc_secret
             }
         }, indent=4))
     print("Setup complete!")

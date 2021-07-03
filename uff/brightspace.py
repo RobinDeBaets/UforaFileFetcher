@@ -12,15 +12,17 @@ class APIError(Exception):
 
 class BrightspaceAPI:
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, otc_secret):
         self._session = None
         self.username = username
         self.password = password
-        self.session = get_session(self.username, self.password)
-        if self.session is None:
+        self.otc_secret = otc_secret
+        try:
+            self.session = get_session(self.username, self.password, self.otc_secret)
+        except:
             raise APIError("No session could be created. Please make sure your credentials are correct")
 
     @staticmethod
     def from_config(config):
         credentials = config["credentials"]
-        return BrightspaceAPI(credentials["username"], credentials["password"])
+        return BrightspaceAPI(credentials["username"], credentials["password"], credentials["otc_secret"])

@@ -14,5 +14,6 @@ setup(
         "selenium==3.141.0",
         "webdriver-manager==3.4.1",
         "pathvalidate==2.4.1",
+        "pyotp==2.6.0"
     ]
 )

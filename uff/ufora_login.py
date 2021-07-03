@@ -1,6 +1,6 @@
-import logging
 import os
 
+import pyotp
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,10 +12,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 LOGIN_URL = "https://elosp.ugent.be/welcome"
 
 
-def get_session(username, password):
+def get_session(username, password, otc_secret):
     print("Launching headless browser to login")
     os.environ["WDM_LOG_LEVEL"] = "0"
-
     chrome_options = Options()
     chrome_options.add_argument("--headless")
 
@@ -30,7 +29,18 @@ def get_session(username, password):
     )
     driver.find_element_by_xpath("//input[@name='passwd']").send_keys(password)
     driver.find_element_by_xpath("//input[@type='submit']").click()
+    WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@name='otc']"))
+    )
+    totp = pyotp.TOTP(otc_secret)
+    code = totp.now()
+
+    driver.find_element_by_xpath("//input[@name='otc']").send_keys(code)
     driver.find_element_by_xpath("//input[@type='submit']").click()
+
+    WebDriverWait(driver, 20).until(
+        EC.title_is("Startpagina - ufora")
+    )
     cookies = driver.get_cookies()
     session = requests.Session()
     for cookie in cookies:

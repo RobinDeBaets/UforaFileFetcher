@@ -1,6 +1,8 @@
 import os
 import sys
 
+import pyotp
+
 from uff.brightspace import BrightspaceAPI, APIError
 from uff.courses import print_courses
 from uff.files import download_files

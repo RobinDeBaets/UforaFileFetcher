@@ -1,4 +1,3 @@
-import argparse
 import json
 
 import inquirer
@@ -12,7 +11,8 @@ from uff.ufora_login import get_session
 def setup():
     username = inquirer.text(message="What's your username")
     password = inquirer.password(message="What's your password")
-    session = get_session(username, password)
+    otc_secret = inquirer.password(message="What's your 2FA secret?")
+    session = get_session(username, password, otc_secret)
     if session is None:
         print("Invalid login credentials")
         return

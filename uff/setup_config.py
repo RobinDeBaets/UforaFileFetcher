@@ -18,7 +18,7 @@ def setup():
         return
     config_file = inquirer.shortcuts.path(message="Specify config file", path_type=Path.FILE)
     output_directory = inquirer.shortcuts.path(message="Specify output directory", path_type=Path.DIRECTORY)
-    brightspace_api = BrightspaceAPI(username, password)
+    brightspace_api = BrightspaceAPI(username, password, otc_secret)
     courses = get_courses_list(brightspace_api)
     selected_courses = inquirer.checkbox(message="Select courses to sync (press enter when ready)",
                                          choices=courses

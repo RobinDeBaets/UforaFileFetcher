@@ -1,3 +1,5 @@
+import traceback
+
 from uff.ufora_login import get_session
 
 ufora = "https://ufora.ugent.be"
@@ -19,7 +21,8 @@ class BrightspaceAPI:
         self.otc_secret = otc_secret
         try:
             self.session = get_session(self.username, self.password, self.otc_secret)
-        except:
+        except Exception:
+            print(traceback.format_exc())
             raise APIError("No session could be created. Please make sure your credentials are correct")
 
     @staticmethod

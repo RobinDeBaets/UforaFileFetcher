@@ -1,5 +1,6 @@
 import os
 import sys
+from concurrent.futures.thread import ThreadPoolExecutor
 
 import pyotp
 
@@ -7,7 +8,7 @@ from uff.brightspace import BrightspaceAPI, APIError
 from uff.courses import print_courses
 from uff.files import download_files
 from uff.setup_config import setup
-from uff.sync import sync
+from uff.sync import sync, DOWNLOAD_THREADS
 from uff.utils import get_config
 
 
@@ -64,7 +65,8 @@ def run():
             output_dir = os.path.expanduser(args[4])
         else:
             output_dir = os.getcwd()
-        download_files(brightspace_api, course_id, output_dir)
+        with ThreadPoolExecutor(max_workers=DOWNLOAD_THREADS) as download_pool:
+            download_files(brightspace_api, course_id, output_dir, download_pool)
     elif command == "sync":
         config = get_config(args[2])
         sync(config)

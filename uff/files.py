@@ -1,6 +1,5 @@
 import os
 import threading
-from os import path
 
 from uff import pdf_wrapper
 from uff.brightspace import le_root, ufora

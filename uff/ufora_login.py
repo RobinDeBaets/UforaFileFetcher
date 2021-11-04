@@ -33,8 +33,6 @@ def get_session(email, password, otc_secret):
     driver.get(LOGIN_URL)
     driver.find_element(By.ID, LOGIN_BUTTON).click()
 
-    # sleep(30)
-
     WebDriverWait(driver, 20).until(
         EC.visibility_of_element_located((By.XPATH, EMAIL_BUTTON))).send_keys(email)
 
@@ -48,7 +46,7 @@ def get_session(email, password, otc_secret):
     WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable((By.XPATH, SIGN_IN_BUTTON))
     ).click()
-    #
+
     otc_button = WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.XPATH, OTC_BUTTON))
     )

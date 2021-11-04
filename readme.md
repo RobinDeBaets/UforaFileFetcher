@@ -39,13 +39,33 @@ pip install -e .
 
 ### Sync
 
-Will sync the configured courses to the configured output directory. This will ignore files that have already been downloaded.
+Will sync the configured courses to the configured output directory as specified in the config file. This will ignore files that have already been downloaded.
 
 ```
 uforafilefetcher sync <config>
 ```
 
 ![](images/sync.png)
+
+Config files can be generated with `uforafilefetcher setup`, but can also be manually created following this layout:
+
+```
+{
+    "output_directory": "~/university/ufora/",
+    "courses": [
+        438620,
+        442195,
+        438596,
+        450000
+    ],
+    "credentials": {
+        "email": "foo.bar@ugent.be",
+        "password": "azerty123",
+        "otc_secret": "pppmmmvvv"
+    }
+}
+
+```
 
 
 ### List courses

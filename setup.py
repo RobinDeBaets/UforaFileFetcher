@@ -11,7 +11,7 @@ setup(
         "beautifulsoup4==4.9.3",
         "tqdm==4.60.0",
         "inquirer==2.7.0",
-        "selenium==3.141.0",
+        "selenium==4.0.0",
         "webdriver-manager==3.4.1",
         "pathvalidate==2.4.1",
         "pyotp==2.6.0"

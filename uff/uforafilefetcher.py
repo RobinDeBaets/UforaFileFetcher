@@ -2,8 +2,6 @@ import os
 import sys
 from concurrent.futures.thread import ThreadPoolExecutor
 
-import pyotp
-
 from uff.brightspace import BrightspaceAPI, APIError
 from uff.courses import print_courses
 from uff.files import download_files
@@ -24,6 +22,10 @@ def check_command_valid(args, commands):
         show_help(commands)
         exit(1)
     command = args[1].lower()
+    if command not in commands:
+        print("Command unknown")
+        show_help(commands)
+        exit(1)
     required_args_count = len([arg for arg in commands[command] if arg.startswith("<")])
     if command not in commands:
         print("Command unknown")
